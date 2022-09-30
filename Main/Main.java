@@ -15,6 +15,7 @@ public class Main {
      */
     public static void main(String[] args) {
         ArrayList<Patient> PatientsArray = new ArrayList<Patient>();
+        Scanner scan = new Scanner(System.in);
         /*CreateArray(PatientsArray);
         PrintArray(PatientsArray);
         PrintPatientByDiagnosis(PatientsArray);
@@ -29,12 +30,61 @@ public class Main {
         PatientsArray.add(new Patient(5993,"Zhytynsʹkyy","Odynetsʹ","Zhdanovych","Chernihivsʹka oblastʹ, misto Chernihiv, vul. I. Franka, 86","987248321",1342432,"alerhiya"));
         PatientsArray.add(new Patient(8473,"Kushchenko","Lyubovyr","Zoryanovych","Dnipropetrovsʹka oblastʹ, misto Dnipro, prov. Khreshchatyk, 20","504958234",6782423,"hryp"));
         PrintArray(PatientsArray);
-        PrintPatientByDiagnosis(PatientsArray);
-        PrintPatientByMedicalCard(PatientsArray);
-        PrintPatientByPhoneNumber(PatientsArray);
 
+        Task1(PatientsArray);
+        Task2(PatientsArray);
+        Task3(PatientsArray);
     }
 
+    /**
+     * Task1 method for the first laboratory task
+     * @param array
+     */
+    private static void Task1(ArrayList<Patient> array){
+        System.out.println("\n\nEnter Diagnosis you need: ");
+        Scanner scan = new Scanner(System.in);
+        String d = scan.nextLine();
+
+        ArrayList<Patient> PatientsWithDiagnosis = PatientByDiagnosis(array, d);
+        PrintArray(PatientsWithDiagnosis);
+    }
+
+    /**
+     * Task2 method for the second laboratory task
+     * @param array
+     */
+    private static void Task2(ArrayList<Patient> array){
+        System.out.println("\n\nEnter Medical Card diapason:\n");
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Min:");
+        int min = scan.nextInt();
+        System.out.println("Max:");
+        int max = scan.nextInt();
+
+        ArrayList<Patient> PatientsByMedCard = PatientByMedicalCard(array, min , max);
+        PrintArray(PatientsByMedCard);
+    }
+
+    /**
+     * Task3 method for the third laboratory task
+     * @param array
+     */
+    private static void Task3(ArrayList<Patient> array){
+        System.out.println("\n\nEnter first Phone number(0-9):\n");
+        Scanner scan = new Scanner(System.in);
+        String temp_first_phone_numb;
+        String FirstNumb;
+        Pattern pattern = Pattern.compile("\\d{1}");
+        Matcher matcher;
+        do{
+            temp_first_phone_numb = scan.next();
+            matcher = pattern.matcher(temp_first_phone_numb);
+        }while(!matcher.matches());
+        FirstNumb = temp_first_phone_numb;
+
+        ArrayList<Patient> PatientsByFirstPhoneNumb = PatientByPhoneNumber(array, FirstNumb);
+        PrintArray(PatientsByFirstPhoneNumb);
+    }
     /**
      * CreateArray method that creates and fills with data from the keyboard an array of Patient objects
      * @param array list for Patient objects
@@ -91,87 +141,57 @@ public class Main {
      * @param array list of Patient objects
      */
     private static void PrintArray(ArrayList<Patient> array){
-        Patient temp;
-        int x = array.size();
-        for (int i = 0; i < x; i++) {
-            temp = array.get(i);
-            System.out.println(i+1+". "+temp.toString());
+        for (Patient p : array) {
+            System.out.println(array.indexOf(p)+". "+p);
         }
     }
 
     /**
-     * PrintPatientByDiagnosis method that Print data of Patients Objects in array by toString method
+     * PatientByDiagnosis method that create array and add Patient
      * if the diagnosis matches what you entered
      * @param array list of Patient objects
+     * @return created array
      */
-    private static void PrintPatientByDiagnosis(ArrayList<Patient> array){
-        Patient temp;
-        System.out.println("\n\nEnter Diagnosis you need: ");
-        Scanner scan = new Scanner(System.in);
-        String d = scan.nextLine();
-        int x = array.size();
-        for (int i = 0; i < x; i++) {
-            temp = array.get(i);
-            if(d.equals(temp.getDiagnosis())){
-                System.out.println(i+1+". "+temp.toString());
+    private static ArrayList<Patient> PatientByDiagnosis(ArrayList<Patient> array, String diagnos){
+        ArrayList<Patient> arrLocal= new ArrayList<Patient>();
+        for (Patient p : array) {
+            if(diagnos.equals(p.getDiagnosis())){
+                arrLocal.add(p);
             }
         }
+        return arrLocal;
     }
 
     /**
-     * PrintPatientByMedicalCard method that Print data of Patients Objects in array by toString method
+     * PatientByMedicalCard method that create array and add Patient
      * if the Medical card corresponds to the range you specified
      * @param array list of Patient objects
+     * @return created array
      */
-    private static void PrintPatientByMedicalCard(ArrayList<Patient> array){
-        Patient temp;
-        System.out.println("\n\nEnter Medical Card diapason:\n");
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println("Min:");
-        int min = scan.nextInt();
-
-
-        System.out.println("Max:");
-        int max = scan.nextInt();
-
-        int x = array.size();
-        for (int i = 0; i < x; i++) {
-            temp = array.get(i);
-            if(temp.getMed_card()<max && temp.getMed_card()>min){
-                System.out.println(i+1+". "+temp.toString());
+    private static ArrayList<Patient> PatientByMedicalCard(ArrayList<Patient> array, int min , int max){
+        ArrayList<Patient> arrLocal= new ArrayList<Patient>();
+        for (Patient p : array) {
+            if(p.getMed_card()<max && p.getMed_card()>min){
+                arrLocal.add(p);
             }
         }
+        return arrLocal;
     }
 
     /**
-     * PrintPatientByPhoneNumber method that Print data of Patients Objects in array by toString method
+     * PatientByPhoneNumber method that create array and add Patient
      * if the Phone Number field begin by number you entered
      * @param array list of Patient objects
+     * @return created array
      */
-    private static void PrintPatientByPhoneNumber(ArrayList<Patient> array) {
-        Patient temp;
-        String phone_numb;
-        String temp_first_phone_numb;
-        System.out.println("\n\nEnter first Phone number(0-9):\n");
-        Pattern pattern = Pattern.compile("\\d{1}");
-        Matcher matcher;
-        Scanner scan = new Scanner(System.in);
-        String FirstNumb;
-        do{
-            temp_first_phone_numb = scan.next();
-            matcher = pattern.matcher(temp_first_phone_numb);
-        }while(!matcher.matches());
-        FirstNumb = temp_first_phone_numb;
-        int x = array.size();
-        for (int i = 0; i < x; i++) {
-            temp = array.get(i);
-            phone_numb = temp.getPhone_number();
-            if(FirstNumb.charAt(0) == phone_numb.charAt(0)){
-                System.out.println(i+1+". "+temp.toString());
+    private static ArrayList<Patient> PatientByPhoneNumber(ArrayList<Patient> array, String FirstNumb) {
+        ArrayList<Patient> arrLocal= new ArrayList<Patient>();
+        for (Patient p : array) {
+            if(FirstNumb.charAt(0) == p.getPhone_number().charAt(0)){
+                arrLocal.add(p);
             }
         }
-
+        return arrLocal;
     }
 
     }
